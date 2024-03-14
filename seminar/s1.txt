@@ -1,0 +1,269 @@
+Calculul propozitional:
+	- se ocupa cu deciderea valorii de adevar pentru o propozitie
+	- are la baza conectori logici: si, sau, not, implicatie
+	Ex: Azi este luni, deci avem seminar de PLF.
+		Propozitiile atomice sunt: p= Azi este luni      |
+					   q= avem seminar de PLF| => p implica q
+		Ce inseamna not(p implica q)?
+		putem sa evaluam expresia cu p = {0, 1} |
+					     q = {0, 1} | =>avem 4 perechi din 
+								produsul cartezian a
+								celor 2 multimi.
+
+						0 -> 0 = 1  | astea 2 le consideram adevarate ptc plecam din prima cu un
+						0 -> 1 = 1  | rationament prost, multimea inconsistenta
+						1 -> 0 = 0  |=> stim sigur ca p implica q atunci cand p este false => (!p)| 
+						1 -> 1 = 1  |=> si sigur cand q este true                                 | => (!p) v q
+
+						p -> q  <=>  p<=q
+
+
+		sau este "disjunctia" si este notat cu v
+		si este  "conjuctia" si este notat ^
+
+
+
+		deci pentru propozitia noastra avem 
+		(p->q) ~ ((!p) v q)
+		Tabela de variabile => n var => 2^n linii
+
+
+		p | q | p->q
+		0 | 0 | 1
+		0 | 1 | 1
+		1 | 0 | 0
+		1 | 1 | 1
+
+
+		p | !p |   
+		0 |  1 |
+		1 |  0 |
+
+		p | q | p^q
+		0 | 0 | 0
+		0 | 1 | 1
+		1 | 0 | 1
+		1 | 1 | 1
+
+
+
+
+
+		p | q | p->q | !q | !p v q | (p->q) ~ ((!p) v q)
+		0 | 0 |  1   |  1 |    1   |        1
+		0 | 1 |  1   |  1 |    1   |        1
+		1 | 0 |  0   |  0 |    0   |        1
+		1 | 1 |  1   |  0 |    1   |        1
+
+	| => not(p implica q) = not( (not p) sau q ) 
+
+	cand negam disjunctia negam fiecare element si sau devine si 
+
+	=> p ^ not(q)
+
+	=> negatia propozitiei este: "Azi este luni si nu avem seminar de PLF"
+
+
+	acum facem tabelul de adevar pt echivalenta(~)
+
+	p | q | p~q
+	0 | 0 | 1
+	0 | 1 | 0
+	1 | 0 | 0
+	1 | 1 | 1
+
+	p | q | p^q
+	0 | 0 | 0
+	0 | 1 | 0
+	1 | 0 | 0
+	1 | 1 | 1
+
+
+	!!! TAUTOLOGIE CA OBTIMEN 1 PT TOATE
+	
+	Exercitiul 2
+	Demonstrati ca ((v1 sau v2) implica v3) echivalent cu ((v1 implica v3) si (v2 implica v3))
+					||			A          ||             ||             B                   ||
+
+
+    !!! Nu am apucat sa il completez
+	v1 | v2 | v3 | v1 v v3 | A | v1 implica v3 | v2 implica v3| B | A~B 
+	0  | 0  |  0 |     1   |   |        1      |         0    |   |  0 
+	0  | 0  |  1 |     1   |   |        1      |         0    |   |  0 
+	0  | 1  |  0 |     1   |   |        1      |         0    |   |  0 
+	0  | 1  |  0 |     1   |   |        1      |         0    |   |  0 
+	0  | 0  |  0 |     1   |   |        1      |         0    |   |  0 
+	0  | 0  |  0 |     1   |   |        1      |         0    |   |  0 
+	0  | 0  |  0 |     1   |   |        1      |         0    |   |  0 
+	0  | 0  |  0 |     1   |   |        1      |         0    |   |  0 
+	0  | 0  |  0 |     1   |   |        1      |         0    |   |  0 
+
+
+	Si noi trb sa aratam ca avem aceleasi valori pe A si B unde A si B sunt calculate din celelalte coloane 
+
+	
+	Introducem limbajul de la compilatoare
+	Limbajul logicii propozitionale
+	Exista o multime VAR 
+
+	Var -> o multime de variabile propozitionale 
+		-> o multime nevida
+		-> o multime numarabila
+
+		N -> multimea numerelor naturale 
+		  -> pentru ca poate fi descrisa de n=n+1
+
+		  Cardinalitatea lui N = > |N| = arata ca un X, aleph zero, cel mai mic infinit
+
+		  Multimea numerelor reale R nu este numarabila.
+		  |R| = aleph1/c
+		  puterea continumului si este egala cu 2^aleph0/ 2^|N|
+
+
+		  O multime M este numarabila daca este echipotenta cu N.
+		  M ~ N 
+
+		  daca exista f:M->N bijectiva 
+
+		  Se introduce notiunea de simbolurile care este alcatuita din variabile cu conectori logici 
+
+		  Sim -> Sim = Var reunit cu { !, ->, (, )}
+
+		  nu avem conjuctie, echivalent si disjunctie deoarece pot fi derivate din negatie si implicatie.
+		
+	Sim^n reprezinta multimea simbolurilor de lungime n 
+	Un simbol de lungime 5 este p->(!q)
+
+
+	Vreau sa construiec multimea de expresie care este multimea de orice lungime din limbajul meu. 
+	Expr = reuniunea Sim^n = {lambda} reunit Sim reunit (reuniune Sim^n cu n>=2)
+
+	Notiunea de formule care este definita inductiv:	
+	De exemplu N este definitiva astfel 0 apartine N si functia succesor care pastreaza elementele in N 
+
+
+
+	(p0) daca v este o variabila atunci v este formula 
+	(p1) daca avem o formula atunci si !formula este o formula (nu stiu cum sa fac fi)
+	(p2) daca phi si psi aprtina formula atunci phi -> psi apartine formula 
+
+
+
+	Exercitiul 3
+
+	Demonstrati ca multimea Formulelor este numarabila
+	Breviar:
+		T0: Daca A este numarabila
+		si B este cel mult numarabila <=> |B| <= aleph0 
+		 => A reunit B, AxB este numarabila
+		
+		T1: Un produs cartezia finit de multimi numarabile
+		este o multime numarabila
+
+		T2: O reunine de familii cel mult numarabile, de 
+		multimi cel mult numarabile este o multime cel mult
+		numarabila. 
+
+
+	Multimea Formulelor este inclusa in multimea de expresii, unde
+	Expr = {lambda} reunit Sim reunit (reuniune Sim^n cu n>=2)
+		   ||          A             ||        B              ||
+
+		unde A = {lambda} reunit cu VAR reunit cu  {~, ->, (, )}
+		si stim camultimea VAR este numarabila  
+		si cealalta multime este finita  =>  ca A este cel mult numarabila 
+
+		unde B = este reuninea n>=2 Sim^n 
+		pentru un n fixat, Sim^n = produs cartezian din Sim 
+							Sim = Var reunit cu {!, ->, (, )} care este numarabila 
+							CONFORM T1 Sim este numarabila 
+							conform T2 ptc avem o reuniune de familii cel mult numarabile => B este cel mult numarabil 
+
+
+
+
+	Interpretarea formulelor 
+	Ca sa pot interpreta formule am nevoie de o functie de interpretare de evaluare pentru variabile 
+	e: Var -> {0, 1}
+
+	e(p) = {
+		1, p e adevarata 
+		0, p e falsa
+	}
+
+	e^+: Form - > {0, 1} definita inductiv astfel:
+		e^+(v)=e(v), pt orice v apartine Var 
+		e^+(!phi)= !e^+(phi), pt orice phi apartine Form 
+		e^+(phi-> psi) = e^+(phi)=>e^+(psi)
+
+    ----------------------------------------------------
+	Exemplu p, q aprtin Var astfel incat e(p)=1 si e(q)=0
+
+
+	e^+((!p)->q) = e^+(!p) -> e^+(q)
+				 = !e^+(p)->e(q)
+				 = !e(p) -> 0
+				 = !1 ->0 = 0->0 = 1
+
+	
+	---------------------------------------------------
+	fie phi si psi formule si fie e:Var->{0, 1}
+	si spunem ca este un model al lui phi sau ca phi este adevarat in e
+	si notam e |= phi daca e^e(phi)=1
+
+
+	spunem ca phi este satisfibiala daca este o evaluare e:var-> {0,1},
+	astfel incat e|=phi            |= <=> semn nou 
+
+	evident spunem ca phi este tautologie daca pentru orice e:Var->{0, 1}
+	e^+(phi)=1
+
+
+
+	spunem ca psi este consecinta semantica a lui phi si notam phi|=psi daca e+(phi)=1 implica e^+(psi)=1
+	spunem ca phi~psi daca pentru orice e:Var->{0, 1},  e|= phi daca si numai daca e|=psi 
+
+
+
+	Exercitiul 4:
+	psi |= (phi -> psi) pt orice phi si psi in Form 
+	demonstratie Fie e:Var -> {0, 1} astfel incat 
+	e^+(psi)=1 si vreau sa arat si ca e^+(e-> psi)=1
+
+
+	e^+(e->psi)=e^+(phi) -> e^+(psi)= e^+(phi)->1
+
+	avem 2 cazuri:
+		- e^+(phi)=0, e^+(phi) ->1 = 0->1=1
+		- e^+(phi=1) 1->1=1
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
