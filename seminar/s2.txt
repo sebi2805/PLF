@@ -1,0 +1,201 @@
+Recap: - logica propozitionala
+       - metoda tabelului
+            - daca avem n atomi propozitionali => 2^n evaluari
+            - daca formula este adevarata pe fiecare linie a tabelului  => este tautologie
+       - tabelele de baza ale conectorilor logici
+       - am definit limbajul logicii propozitionale:
+            - aveam multimea Var de variabile care trb sa nu fie vida si numarabila 
+                - var este numarabila daca estia Var -> N o bijectie
+            - multimea simbolurilor Sim care este Var reunit cu { negatie ! , ( , ) , ->} NU AVEM and si OR ptc pot
+             fi derivate di implicatie
+            - multimea expresiilor Expr este multimea vida reunita cu multimea simbolurilor reunita cu Sim^n cu n>=2
+                - obs |Expr| = X0
+            - multimea formulelor reprezinta o submultime a expresiilor care sunt bine formate
+                (1) daca este v este variabila  => v este formula 
+                (2) daca phi este formula atunci !phi este si ea formula 
+                (3) daca phi si psi sunt formule => si phi->psi este o formula 
+                - |Form| =X0 dovedim ca e si ea numarabila  
+
+------------------------------------------------------------------------------------------------------------------
+
+Interpretarea si evaluarea formulelor
+e: Var -> {0, 1} functie de evaluare 
+
+se poate defini o functie e^+: Form -> {0, 1}  si este extinderea lui e pe formule 
+e+(v) = e(v) pentru orice v apartine Var 
+e+(!phi) = !e+(phi) pentru orice phi este o formula 
+e+(phi -> psi ) = e+(phi) -> e+(psi)
+
+------------------------------------------------------------------------------------------------------------------
+
+Exemplu:
+    e:Var-> {0, 1} a.i. e(p)=1 si e(q)=1
+    e+((!p)->q) = e+(!p) -> e+(q)
+                = !e+(p) -> e(q)
+                = !e(p)  -> e(q)
+                = !1 -> 0
+                =  0 -> 0
+                =  1
+
+p | q | (!p) -> q
+1 | 0 | 1
+
+------------------------------------------------------------------------------------------------------------------
+
+avem acest simbol |= care se numeste simbol de satisfacere semantica 
+
+e: Var -> {0, 1} si phi este o Form
+e |= phi 
+    - citim e satisface phi 
+    - e este model al lui phi 
+    - phi este adevarat in evaluare lui e 
+    | <=> daca si numai daca e+(phi)=1
+
+si din exercitiul anterior putem spune ca e |= (!p)->q
+
+
+notam |= phi daca phi este adevarat in orice evaluare, adica pentru orice "e" de pe variabile 
+avem 1, asta inseamna ca phi e tautologie
+
+
+
+o formula phi este satisfiabila daca este cel putin o evaluare "e" astfel incat phi este adevarat
+    p->q este satisfiabila, pentru ca exista cel putin un caz
+
+
+phi |= psi
+se citeste psi este o consecinta semantica a lui phi 
+    - daca phi este adevarat atunci psi este adevarat 
+    - pt orice evaluare e:Var -> {0, 1} daca e+(phi)=1 => e+(psi)=1
+
+------------------------------------------------------------------------------------------------------------------
+
+Exemplu: Demonstrati ca phi |= psi -> phi 
+Fie e:Var-> {0, 1} a.i. e+(phi)=1
+Trb sa aratam ca e+(psi->phi)=1
+
+si incepem sa descompunem
+= e+(psi)->e+(phi)
+= e+(psi)->1
+= 1 pentru ca indiferent de valoarea lui psi o sa avem adevarat datorita tabelului de implicatie
+
+------------------------------------------------------------------------------------------------------------------
+
+Exercitiu: Demonstrati ca !phi este nesatisfibiala daca phi este tautologie 
+
+(!phi) nesatisfibiala <=> (!phi) nu este satisfiabila
+                      <=> nu este adevarat ca !phi este satisfiabila
+                      <=> nu este adevarat ca exista e:Var ->{0, 1} a.i. e |= (!phi)  
+                      <=> pentru orice evaluare e:Var->{0, 1} este fals ca e |= (!phi) sau e+(!phi)=1
+                      <=> pentru orice e este fals !e+(phi)=1
+                      <=> pentru orice e este fals e+(phi)=0
+                      <=> pt orice e avem e+(phi)=1 care este acelasi lucru cu e|=phi 
+                      <=> phi este tautologie
+                      
+------------------------------------------------------------------------------------------------------------------
+
+Exercitiu 
+Confirmati sau infirmati 
+|= phi v psi ddaca |= phi sau |=psi 
+        daca consideram <= indirecta da, este corecta
+        dar directa nu este sigura, adica daca stim phi sau psi este tautologie nu stim sigur ca unul dintre ele este
+
+|= phi v psi 
+pt orice e:Var->{0, 1}
+e+(phi v psi)=1
+
+|= phi pt orice e 
+    e+(phi)=1
+
+Ideea pentru demonstratie cautam formule phi si psi si evaluari astfel incat 
+phi si psi sa nu fie tautologii
+
+fie v o Var si phi=v si psi=!v
+fie e0: Var->{0, 1} e0(v)=0 pentru orice v apartine Var 
+fie e1: Var->{0, 1} e1(v)=1 pentru orice v apartine Var 
+
+aplicam e0+(phi)=e0+(v)=e0(v)=0 => e nu este model al lui phi |=  => phi nu este tautologie
+        e1+(psi)=e1+(!v)=!e1(v)=!1=0 => nici e1 nu este model pt psi 
+    
+    dar fie e:Var->{0, 1} 
+    e+(phi v psi)=e+(phi) v e+(psi) = e+(v) v e+(!v) = e(v) v !e(v) = 1 mereu ptc ai sau intre p si not pe
+
+------------------------------------------------------------------------------------------------------------------
+
+Principiul inductiei pe formule 
+Fie P o proprietate a formulelor astfel incat:
+    (1) P(v) este adevarata pentru orice v apartine Var 
+    (2) daca P(phi) este adevarata atunci si P(!phi)
+    (3) daca P(phi) si P(psi) sunt adevarate atunci P((phi->psi)) este si ea adevarata 
+
+atunci P(phi) este adevarata pentru orice phi este o Form
+
+------------------------------------------------------------------------------------------------------------------
+
+Exercitiu
+Demonstrati ca pentru orice formula numarul de paranteze deschide este egal cu numarul de paranteze inchise
+
+l, r: Form -> N 
+l(phi) =  nr. de paranteze deschise 
+r(phi) =  nr. de paranteze inchise
+
+si propritatea pe care o definim este ca P(phi) : l(phi) == r(phi)
+
+aplicam principiul inductiei pe formule 
+    daca avem v o Variabila => l(v)=0=r(v) ptc nu avem paranteze
+    daca avem negatie stim ca P(phi) : l(phi) == r(phi)
+        si trb sa demonstram P(!phi) : l(!phi) == r(!phi)
+        astfel pt l((!phi)) = 1 + l(phi) = 1 + r(phi) = r((!phi))
+    daca avem implicatie stim ca P(phi) : l(phi) == r(phi)
+                                 P(psi) : l(psi) == r(psi)
+                            si trebuie sa demon ca l(phi->psi) == r(phi->psi)
+                            astfel l((phi->psi)) = 1 + l(phi) + l(psi)
+                                                 = 1 + r(phi) + r(psi)
+                                                 = r((phi->psi))
+
+P(phi) este adevarata dar functioneaza doar pt phi apartine o formula
+
+------------------------------------------------------------------------------------------------------------------
+
+Principiul recursiei pe formule 
+Fie A o multime si fie functiile:
+    G0: Var->A
+    Gnegate: A -> A
+    Gimplica: AxA -> A 
+
+Atunci exista o unica functie F: Form -> A 
+asfel incat  F(v) = G0(v) pt orice variabila
+             F(!v) = Gnegat(F(v)) 
+             F((phi->psi)) = Gimplica(F(phi), F(psi))
+
+------------------------------------------------------------------------------------------------------------------
+!!!nu avem la examen
+Exemplu: Sa se scrie o functie care sa calculeze pt orice formula numarul de conectori logici utilizati
+fie o functie c:Form->N 
+c(v) = 0  pt orice v apartine Var 
+c(!phi) = 1 + c(phi) pt orice phi o formula 
+c(phi->psi) = 1 + c(phi) + c(psi) 
+
+A = N 
+G0:Var-> N  G0(v)=0
+Gnegat:N-> N   Gnegat(x)=1+x
+Gimplica: NxN -> N Gimplica(x, y)= 1 + x + y
+
+------------------------------------------------------------------------------------------------------------------
+
+Exercitiu
+Calculati multimea variabilelor propozitionale dintr o formula: 
+
+2^Var care este inclusa in Var
+fct Vars: Form -> 2^Var  
+Vars(v) = {v}
+Vars((!pgi)) = Vars(phi)
+Vars(phi->psi) = Vars(phi) reunit cu Vars(psi)
+
+
+G0: Var -> 2^var G0(v)={v} 
+Gnegat: 2^var->2^var Gnegat(delta)=delta unde delta este o multime 
+Gimplica: 2^var x 2^var -> 2^var Gimplica(delta, sigma) = delta reunit cu sigma
+
+
+
