@@ -1,31 +1,26 @@
-list_length([], 0).
-list_length([_|T], L) :- list_length(T, L1), L is L1 + 1.
+father(bob, alice).
+father(bob, carol).
+father(bruce, eva).
+
+mother(alice, david).
+mother(carol, eva). 
+mother(carol, frank).
+
+parent(F, M, C) :-
+    father(F, C);
+    mother(M, C).
+
+brother(B1, B2) :-
+    parent(F1, M1, B1),
+    parent(F1, M1, B2).
+
+grandfather(GF1, GM1, GF2, GM2, C) :- !.
 
 
-list_sum([], 0).
-list_sum([H|T], S) :- list_sum(T, S1), S is S1 + H.
 
+inversa(L, R) :-
+    inversa_aux(L, [], R).
 
-elements_of(X, [X|_]).
-elements_of(X, [_|T]) :- elements_of(X, T).
-
-all_a([]).
-all_a([ a | T]) :- all_a(T).
-
-
-all_a([ a | T]) :- all_a(T).
-
-trans_a_b([], []).
-trans_a_b([a| T1], [b|T2]) :-
-    trans_a_b(T1, T2).
-
-
-scalarMult(_, [], []).
-scalarMult(X, [H|T], [H1|T1]) :- H1 is X * H, scalarMult(X, T, T1).
-
-
-dot([], [], 0).
-dot([H1|T1], [H2| T2], Res) :-dot(T1, T2, Res1),  Res is H1 * H2 + Res1.
-
-
-max([], 0).
+inversa_aux([], Acc, Acc).    
+inversa_aux([H | T], Acc, R):-
+    inversa_aux(T, [H | Acc], R).
