@@ -1,26 +1,28 @@
-father(bob, alice).
-father(bob, carol).
-father(bruce, eva).
+% Predicatul principal care inițiază adunarea, cu gestionarea transportului (carry)
+adun(N, M, R) :-
+    reverse(N, NRev),
+    reverse(M, MRev),
+    adun_cifre(NRev, MRev, 0, RRev),
+    reverse(RRev, R).
 
-mother(alice, david).
-mother(carol, eva). 
-mother(carol, frank).
+% Cazul de bază: când ambele liste sunt goale și nu există transport, rezultatul este o listă goală.
+adun_cifre([], [], 0, []) :- !.
 
-parent(F, M, C) :-
-    father(F, C);
-    mother(M, C).
+% Dacă ambele liste sunt goale dar există un transport, acesta trebuie adăugat la rezultat.
+adun_cifre([], [], Carry, [Carry]) :- Carry > 0.
 
-brother(B1, B2) :-
-    parent(F1, M1, B1),
-    parent(F1, M1, B2).
+% Dacă una dintre liste este goală, pur și simplu "transferăm" cifrele și transportul în rezultat.
+adun_cifre([], [M|Ms], Carry, [R|Rs]) :-
+    !, Sum is M + Carry, NextCarry is Sum div 10, R is Sum mod 10,
+    adun_cifre([], Ms, NextCarry, Rs).
 
-grandfather(GF1, GM1, GF2, GM2, C) :- !.
+adun_cifre([N|Ns], [], Carry, [R|Rs]) :-
+    !, Sum is N + Carry, NextCarry is Sum div 10, R is Sum mod 10,
+    adun_cifre(Ns, [], NextCarry, Rs).
 
-
-
-inversa(L, R) :-
-    inversa_aux(L, [], R).
-
-inversa_aux([], Acc, Acc).    
-inversa_aux([H | T], Acc, R):-
-    inversa_aux(T, [H | Acc], R).
+% Cazul general: adunăm cifrele și transportul, apoi continuăm recursiv.
+adun_cifre([N|Ns], [M|Ms], Carry, [R|Rs]) :-
+    Sum is N + M + Carry,
+    NextCarry is Sum div 10,
+    R is Sum mod 10,
+    adun_cifre(Ns, Ms, NextCarry, Rs).
