@@ -80,7 +80,88 @@ solution(Street, ZebraOwner) :-
     member(house(_, ZebraOwner, _, zebra, _, _), Street).
 
 
-tree(1, 2, 3).
-tree(2, nil, nil).
-tree(3, nil, nil).
+
+/**
+        5
+       / \
+      3   8
+     / \   \
+    1   4   9
+**/
+
+tree(5, 3, 8).
+tree(3, 1, 4).
+tree(1, nil, nil).
+tree(4, nil, nil).
+tree(8, nil, 9).
+tree(9, nil, nil).
+
+arbore_bin( tree(5, 
+                 tree(3, 
+                      tree(1, nil, nil), 
+                      tree(4, nil, nil)
+                     ), 
+                 tree(8, 
+                      nil, 
+                      tree(9, nil, nil)
+                     )
+                ) 
+          ).
+
+inorder(nil, []). % Cazul bază: arborele vid nu are noduri de vizitat.
+inorder(tree(Root, Left, Right), List) :-
+    inorder(Left, LList), % Vizitează subarborele stâng
+    inorder(Right, RList), % Vizitează subarborele drept
+    append(LList, [Root|RList], List). % Construiește lista finală
+
+inorder_aux(R, L) :-
+    arbore_bin(tree(R, C1, C2)),
+    inorder(tree(R, C1, C2), L).
+    
+preorder(nil, []). % Cazul bază: arborele vid nu are noduri de vizitat.
+preorder(tree(Root, Left, Right), [Root|List]) :-
+    preorder(Left, LList), % Vizitează subarborele stâng
+    preorder(Right, RList), % Vizitează subarborele drept
+    append(LList, RList, List). % Construiește lista finală
+
+% Post-ordine
+postorder(nil, []). % Cazul bază: arborele vid nu are noduri de vizitat.
+postorder(tree(Root, Left, Right), List) :-
+    postorder(Left, LList), % Vizitează subarborele stâng
+    postorder(Right, RList), % Vizitează subarborele drept
+    append(LList, RList, TempList),
+    append(TempList, [Root], List). % Construiește lista finală
+
+leaves_aux(nil, []).
+leaves_aux(tree(R, nil, nil), [R]).
+leaves_aux(tree(_, C1, C2), L) :-
+    leaves_aux(C1, L1),
+    leaves_aux(C2, L2),
+    append(L1, L2, L).
+leaves(R, L):-
+    arbore_bin(tree(R, C1, C2)),
+    leaves_aux(tree(R, C1, C2), L).
+
+/**
+divs_aux(N, N, [N]).
+divs_aux(N, D, [D|L]):-
+    N mod D =:= 0,
+    D1 is D+1, 
+    divs_aux(N, D1, L).
+divs_aux(N, D, L) :-
+    D1 is D+1, 
+    divs_aux(N, D1, L).
+
+divs(N, L):-
+    divs_aux(N, 1, L).
+    **/
+
+divs(N, L) :-
+    numlist(1, N, Range),
+    findall(X, ( member(X, Range), N mod X =:= 0 ), L).
+
+divs_pair(N, L) :-
+    numlist(1, N, Range),
+    findall((A, B), ( member(A, Range), N mod A =:= 0, B is N/A ), L).
+
 
