@@ -1,0 +1,161 @@
+Rezolutie SLD
+
+Modul in care prolog raspunde intrebarilor
+mecanism de calcul in logica de ordin 1
+    Fragmentul clauzelor definite
+
+Fragment de clauze definite ma refer la faptul ca toate formulele din logica sunt scrise 
+cu conjuctie si implicatie
+
+Folosim SLD ca mod de calcul in prolog 
+
+intotdeuna cand facem rezolutie, noi primim un program in prolog si vedem daca este corect sau ce
+substitutii avem nevoie
+
+am nevoie de o tanslatare din Prolog in logica de ordinul 1
+
+daca am un fact p(t1, ..., tn). asta se traduce in formula locia in  |-> p(t1, ...tn)
+    si un fact p :- Q1,... QN  INSEAMNA CA  Q1 ^ .. ^ Qn -> p 
+    |=| transformam implicatia in disjunctie !(Q1^... ^ Qn) v p 
+    |=| aplicam deMorgan !Q1 v !Q2 v ... v p 
+
+-----------------------------------------------------------------------------------------------------
+
+exercitiul 1 
+fie urmatorul program in prolog 
+
+   Prolog       |   Logica de ordinul 1
+1. r :- p, q.   |  !p v !q v r 
+2. s :- p, q.   |  !p v !q v s 
+3. v :- t, u.   |  !p v !u v v 
+4. w :- v, s.   |  !v v !s v w
+5. t.           |  t
+6. q.           |  q
+7. u.           |  u
+8. p.           |  p
+
+si vrem sa vedem daca raspunde la intrebarea ?- w
+
+primul lucru pe care il facem este sa luam program si sa il traducem intr o formula de logica de ordinul 1
+pentru a raspunde la intrebarea w? 
+
+
+:- w <=> asta inseamna ca w implica multimea vida 
+                    sau ca w implica fals 
+                    adica (!w sau fals) si stim ca fals este elementul neutru al disjuctiei
+                    deci ramane doar !w 
+                asa ca ce vreau sa fac in prolog este sa gasesc o SLD respingere
+
+                C1 U {p}  C2 U {!p}
+                -------------------
+                        C1 U C2 
+                
+                Rez = {p} si {!p} => box 
+
+
+                deci eu plec de la !w si incerc sa gasesc box/patratel, adica o respingere, ceea ce a inseamna ca 
+                w normal este true, este satisfiabil
+
+    ?- w <=> !p 
+
+    G -> goal
+    G0 = !w am !w si ma uit la ultimul elemenent din disjuctiile de mai sus si vad daca seamana cu w
+    G1 = !v v !s pentru ca am facut cu regula 4 
+    G2 = !t v !u v !s pentru ca am facut cu regula 3 bazat pe v. Rezolutie intre G1 si linia 3
+    G3 = !u v !s rezolutie intre G2 si formula 5
+    G4 = !s rezolutie intre G3 si formula 7
+    G5 = !p v ! !q si am facut rezolutie intre G4 si linia 2
+    G6 = !q pentru ca am facut cu linia 8 
+    G7 = [] patratel ca am facut cu linia 6
+
+    Raspunsul final: Am gasit o SLD respingere a tintei, deci tinta este satisfacuta 
+
+-----------------------------------------------------------------------------------------------------
+
+1. q(X, Y):- q(Y, X), q(Y, f(f(Y))).  | !q(Y, X)  v !q(Y, f(f(Y))) v q(X, Y)
+2. q(a, f(f(X))).                     | q(a, f(f(X)))
+
+
+
+?- q(f(Z), a)
+
+G0 = !q(f(Z), a) am not q si incerc sa fac o rezolutie cu un q normal si trb sa gasesc pe cnv care sa faca unificare
+                verfic rezolutie intre G0 si linia 2
+                aceasta rezolutie functioneaza 
+                q(f(Z), a) = q(a, f(f(x))) aplic descompunere 
+                => f(Z) = a, a = f(f(x)) esec pentru ca am simboluri diferite de functii 
+                => nu putem aplica 
+
+            verific daca pot sa fac rezolutie intre G0 si linia 1 
+            q(f(Z), a) = q(X, Y) aplic descompunere 
+            f(Z) = X, a = Y
+            ->teta(X)=f(Z), teta(Y)=a  
+G1 = a functioneaza rezolutia intre G0 si linia 1 cu substitutia 
+            ->teta(X)=f(Z), teta(Y)=a  
+    si acum pentru ca unim linia 1 cu G0 eliminam ultimul element si facem si substitutia 
+    astfel ramane: !q(a, f(Z)) v !q(a, f(f(a)))
+
+G2 = aleg ultimul element din G1 si incerc sa unific cu linia 2
+    aplicand o rezolutie intre linia 2 si G1 
+    si functioneaza si am urmaotarea substituie Q(X) = a 
+si ramanaee !q(a, f(Z))
+
+
+G3 = Verific rezolutia intre Rez(G2, 2) 
+aplica desc, scoate si desc si 
+rezulta ca teta(Z) = f(x)
+
+aplicand rezolutia rezulta ca avem patratel pentru G3 
+
+-----------------------------------------------------------------------------------------------------
+
+Ex3 
+
+1. p(X) :-q(X, f(Y)), r(a). | !q(x, f(Y)) v !r(a) v p(v)
+2. p(X) :- r(X).            | !r(X) v p(X)
+3. q(X, Y) :- p(Y).         | !P(y) V q(X, Y)
+4. r(X):- q(X, Y).          | !q(X, y) v r(x)
+5. r(f(b)).                 | r(f(b))
+
+?- q(X), q(Y, Z).
+
+G0 = !p(X) v q(Y1, Z)
+G1 = aplicand rezolutia intre G0 si linia 2 cu teta(X)=X 
+    !r(X) v !q(Y1, Z)
+G2 = aplicand rezolutie intre G1 si linia 5 cu teta(X) = f(b)
+    ramane !q(Y1, Z)
+
+G3 = fac rezolutie intre G2 si linia 3 
+    Y1 = X, Z = Y, astfel avem subst. teta(Y1)=X si teta(Z)=Y 
+
+    ramane !p(Y) care e neschimbat ptc e alt Y 
+
+G4 = aplicand rezolutie intre G3 si 2 obtin Teta(Y) = X
+    !r(X) 
+
+G5 = fac rezolutia cu 5 si facem subst X = f(b)  
+    si obtinem patratel 
+
+-----------------------------------------------------------------------------------------------------
+
+1. m(e, c).                 |
+2. m(d, b).                 |
+3. f(a, b).                 |
+4. f(a, c).                 |
+5. p(a).                    |
+6. p(d).                    |
+7. p(X) :- f(Y, X), p(Y).   |
+
+?- p(X), m(), p(Y).
+G0 = !p(X) v !m(Y, X) v !p(Y)
+    si nu pot sa fac rezolutie decat cu 7 pentru 
+G1 = !p(X) v v !m(d, X)
+    aplicand rezolutia G0 si 6 si teta(Y) = d 
+G2 = !f(Y, X) v !p(Y) v !m(d, X) 
+    aplicand rezolutia intre G1 si 6 cu teta(X)=X
+G3 = aplicand rezolutie intre G2 si 2 cu teta(X) = B 
+    !f(Y, b) v !p(Y) 
+G4 = aplicand rezolutie intre 3 si 3 cu teta(Y)=a
+
+G5 = aplicand rezolutie intre G4 si linia 5 
+    patratel
