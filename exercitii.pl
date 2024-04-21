@@ -255,5 +255,13 @@ p17(L, N, R1, R2) :-
        X = [c,d,e,f,g]
 **/
 
-p18_aux(L, Start, End, I1, I2, R)
-p18(L, Start, End, R):-
+p18([H|_], 1, 1, [H]):-!.
+p18([H|T], 1, End, [H|R]):-
+       End1 is End-1,
+       p18(T, 1, End1, R),
+       !.
+
+p18([_|T], Start, End, R):-
+       Start1 is Start-1,
+       End1 is End-1,
+       p18(T, Start1, End1, R).

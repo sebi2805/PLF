@@ -86,10 +86,6 @@ write_n(N, Sym) :-
     N1 is N-1,
     write_n(N1, Sym).
 
-write_aux_2(N, I, Sym) :-.
-
-
-write_n_2(N, Sym) :- .
 
 min(X, Y, Y) :-
     X > Y,
@@ -159,15 +155,177 @@ concat_lists([H|T], L, [H|R]):-
     concat_lists(T, L, R).
 
 
+% remove_duplicate([], []).
+% remove_duplicate([H|T], [H|R]):-
+%     remove_duplicate(T, R),
+%     \+ element_of(R, H). 
+% remove_duplicate([H|T], R):-
+%     remove_duplicate(T, R),
+%     element_of(R, H). 
+
+
+s(1, 2).
+s(1, 3).
+s(2, 4).
+s(2, 5).
+s(3, 5).
+s(3, 4).
+objective(5).
+
+
+extend([Node | NodeTail], L) :-
+    findall([NewNode, Node | NodeTail], (s(Node, NewNode)), L).
+
+bfs([[H|T]|_], [H|T]) :- objective(H).
+bfs([Path|PathTail], R) :-
+    extend(Path, ExtendedPath),
+    append(ExtendedPath, PathTail, NewPaths),
+    bfs(NewPaths, R).
+
+solve(Start, R):-
+    bfs([[Start]], R).
+
+def(myTree, tree(1, tree(2, tree(4, nil, tree(7, nil, nil)), nil), tree(3, tree(5, nil, nil), tree(6, nil, nil)))).
+
+inorder(nil, []).
+inorder(tree(Leaf, nil, nil), [Leaf]):-!.
+inorder(tree(Root, Left, Right), R) :-
+    inorder(Left, LeftList), 
+    inorder(Right, RightList), 
+    append(LeftList, [Root|RightList], R).
+
+preorder(nil, []).
+preorder(tree(Leaf, nil, nil), [Leaf]):-!.
+preorder(tree(Root, Left, Right), R) :-
+    preorder(Left, LeftList), 
+    preorder(Right, RightList), 
+    append([Root | LeftList], RightList, R).
+
+postorder(nil, []).
+postorder(tree(Leaf, nil, nil), [Leaf]):-!.
+postorder(tree(Root, Left, Right), R) :-
+    postorder(Left, LeftList), 
+    postorder(Right, RightList), 
+    append(LeftList, RightList, R1),
+    append(R1, [Root], R).
+
+srd(nil, []).
+srd(tree(Root, Left, Right), Result) :-
+    srd(Left, ResultLeft),
+    srd(Right, ResultRight),
+    append(ResultLeft, [Root | ResultRight], Result).
+
+
+compare_scores(Order, (_, Score1), (_, Score2)) :-
+    compare(Order, Score2, Score1).
+
+sort_by_score(UnsortedList, SortedList) :-
+    predsort(compare_scores, UnsortedList, SortedList).
+
+
+min([H], H).
+min([H|T], H) :-
+    min(T, Min),
+    H < Min,
+    !.
+min([_|T], Min):-
+    min(T, Min).
+
+eliminate(_, [], []):-!.
+eliminate(E, [E|T], L):-
+    eliminate(E, T, L),
+    !.
+eliminate(E, [H|T], [H|L]):-
+    eliminate(E, T, L).
+
+selection_sort([], []):-!.
+selection_sort([H|T], [Min|MinTail]):-
+    min([H|T], Min), 
+    eliminate(Min, [H|T], NewList),
+    selection_sort(NewList, MinTail) .
+
+element_at(H, [H|_], 0):-!.
+element_at(X, [_|T], K):-
+    K1 is K-1,
+    element_at(X, T, K1).
+
 remove_duplicate([], []).
-remove_duplicate([H|T], [H|R]):-
-    remove_duplicate(T, R),
-    \+ element_of(R, H). 
-remove_duplicate([H|T], R):-
-    remove_duplicate(T, R),
-    element_of(R, H). 
+remove_duplicate([H|T], [H|R]) :-
+    eliminate(H, T, NewTail),
+    remove_duplicate(NewTail, R).
+
+rotate_aux([], Acc, Acc):-!.
+rotate_aux([H|T], Acc, R):-
+    rotate_aux(T, [H|Acc], R).
+rotate(L, R):-
+    rotate_aux(L, [], R).
+
+
+list_compare(Order, List1, List2):-
+    length(List1, L1),
+    length(List2, L2),
+    compare(Order, L1, L2).
+sort_lists(UnorderedLists, OrderedLists):-
+    predsort(list_compare, UnorderedLists, OrderedLists).
+
+
+flatten([], []).
+flatten([H|T], R):-
+    is_list(H),
+    flatten(H, R1),
+    flatten(T, R2),
+    append(R1, R2, R), !.
+flatten([H|T], [H|R]):-
+    flatten(T, R).
 
 
 
-bagof1(T, Goal, List):-
-    findall(X, (Goal), List).
+select_e(L, E, Rest):-
+    member(E, L),
+    eliminate(E, L, Rest).
+
+permutari([], []).
+permutari(L, [E|Rez]):-
+    select_e(L, E, Rest), 
+    permutari(Rest, Rez).
+
+solve_permutari(L, R):-
+    findall(X, (permutari(L, X)), R).
+
+ def1(myBinarySearchTree, tree(5, tree(3, tree(2, nil, nil), tree(4, nil, nil)), tree(7, tree(6, nil, nil), tree(8, nil, nil)))).   
+
+
+binary_search(tree(Root, _, _), Root, [Root]).
+binary_search(tree(Root, Left, _), Value, [Root|List]) :-
+        Root > Value, 
+        binary_search(Left, Value, List). 
+binary_search(tree(Root, _, Right), Value, [Root|List]) :-
+        Root < Value, 
+        binary_search(Right, Value, List). 
+solve_binary_search(Value, Rez):-
+    def1(myBinarySearchTree, X), 
+    binary_search(X, Value, Rez).
+
+
+rotire([H|T], RL):-
+    append(T, [H], RL).
+
+rotire_k(RL, 0, RL):-!.
+rotire_k(L, K, R):-
+    rotire(L, RL), 
+    K1 is K-1,
+    rotire_k(RL, K1, R).
+
+num_to_list(0, []):-!.
+num_to_list(N, [D|R]):-
+    D is N mod 10,
+    NewN is N//10,
+    num_to_list(NewN, R).
+
+is_palindrome(N):-
+    num_to_list(N, L),
+    reverse(L, L).
+
+
+cmmdc(A, B, Rez) :-
+    

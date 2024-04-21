@@ -1,0 +1,96 @@
+Algoritmul de unificare 
+
+Specificatia limbajului de ordinul I
+
+- x, y, z, u, v sunt Variabile
+- a, b, c sunt constante (simbol de functie de aritate 0)
+- h, g sunt simboluri de functii de aritate 1
+- f, *, + sunt simboluri de functii de aritate 2
+- p este simbol de functie de aritate 3 
+
+Vrem sa unificam urmatorii termeni.
+
+1. f(h(a), g(x)) cu f(y, y)
+
+Multimea solutiei				Multimea de rezolvat					Operatie
+-----------------------------------------------------------------------------------------------------------------
+multimea vida					f(h(a), g(x)) = f(y, y)					DESCOMPUNE
+multimea vida					h(a) = y, g(x) = y					REZOLVA
+y = h(a)					g(x) = h(a)						ESEC
+
+Concluzia: nu exista un unificator.
+
+2. p(a, x, g(x)) cu p(a, y, y)
+
+Multimea solutiei				Multimea de rezolvat					Operatie
+-----------------------------------------------------------------------------------------------------------------
+multimea vida					p(a, x, g(x)) = p(a, y, y)				DESCOMPUNE
+multimea vida					a = a, x = y, g(x) = y					SCOATE
+multimea vida					x = y, g(x) = y						REZOLVA
+y = x						g(x) = x						ESEC
+
+Concluzia: nu exista un unificator. 
+
+3. p(x, y, z) cu p(u, f(v, v), u)
+
+Multimea solutiei				Multimea de rezolvat					Operatie
+-----------------------------------------------------------------------------------------------------------------
+multimea vida					p(x, y, z) = p(u, f(v, v), u)				DESCOMPUNE
+multimea vida					x = u, y = f(v, v), z = u				REZOLVA
+x = u						y = f(v, v), z = u					REZOLVA
+z = u, x = u					y = f(v, v)						REZOLVA
+y = f(v, v), z = u, x = u			multimea vida						STOP
+
+Concluzia: exista un unificator, iar el este \nu = {f(v, v) / y, u / z, u / x}. 
+
+4. f(x, f(x, x)) cu f(g(y), f(z, g(a)))
+
+Multimea solutiei				Multimea de rezolvat					Operatie
+-----------------------------------------------------------------------------------------------------------------
+multimea vida					f(x, f(x, x)) = f(g(y), f(z, g(a)))			DESCOMPUNE
+multimea vida					x = g(y), f(x, x) = f(z, g(a))				DESCOMPUNE
+multimea vida					x = g(y), x = z, x = g(a)				REZOLVA
+x = g(a)					g(a) = g(y), g(a) = z					DESCOMPUNE
+x = g(a)					a = y, g(a) = z						REZOLVA
+y = a, x = g(a)					g(a) = z						REZOLVA
+z = g(a), y = a, x = g(a)			multimea vida						STOP
+
+Concluzia: exista unificator, iar el este \nu = {g(a) / z, a / y, g(a) / x}.
+
+5. x + (y * y) cu (y * y) + z
+
+plus(x, star(y, y)) = plus(star(y, y), z)
+
+Multimea solutiei				Multimea de rezolvat					Operatie
+-----------------------------------------------------------------------------------------------------------------
+multimea vida					x + (y * y) = (y * y) + z				DESCOMPUNE
+multimea vida					x = y * y, y * y = z					REZOLVA
+x = y * y					y * y = z						REZOLVA
+z = y * y, x = y * y				multimea vida						STOP
+
+Concluzia: exista unificator, iar el este \nu = {y * y / z. y * y / x}.
+
+6. f(g(x), x) cu f(y, y)
+
+Multimea solutiei				Multimea de rezolvat					Operatie
+-----------------------------------------------------------------------------------------------------------------
+multimea vida					f(g(x), x) = f(y, y)					DESCOMPUNE
+multimea vida					g(x) = y, x = y						REZOLVA
+y = x						g(x) = x						ESEC
+
+Concluzia: nu exista unificator. 
+
+7. p(a, u, h(x)) cu p(y, f(y, z), z).
+
+Multimea solutiei				Multimea de rezolvat					Operatie
+-----------------------------------------------------------------------------------------------------------------
+multimea vida					p(a, u, h(x)) = p(y, f(y, z), z)			DESCOMPUNE
+multimea vida					a = y, u = f(y, z), h(x) = z				REZOLVA
+y = a						u = f(a, z), h(x) = z					REZOLVA
+z = h(x), y = a					u = f(a, h(x))						REZOLVA
+u = f(a, h(x)), z = h(x), y = a			multimea vida						STOP
+
+Concluzia: unificatorul este {f(a, h(x)) / u, h(x) / z, a / y}.
+
+pauza 15 min
+			
