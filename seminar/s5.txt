@@ -1,0 +1,251 @@
+1. Puncte Fixe. Teorema Knaster-Tarshki
+2. Forme Prenex. Forma Skolem -> care ne vor construi rezolutia in logica de ordinul 1
+
+1. 
+-------------------------
+Teorie
+Def. Fie M o multime si <= o submultime a lui M^2 o relatie de ordine
+
+Caracterizarea relatiilor de ordine:
+1. reflexivitatea  a <= a DA
+2. simetria        a<=b => b<=a
+3. tranzivitatea   a<=b si b<=c => a<=c
+
+astfel relatia noastra este reflexicitatea, antisimetrica si tranzivitatea
+
+atunci tuplu (M, <=) se numeste multime partial ordonata si o vom nota mpo
+Exemple:
+
+daca avem multimea N si relatia <= atunci ea este complet ordonata deoarece toate elementele sunt comparabile
+oricum alegem (x, y) in putem defini relatia noastra 
+Reprezentarea pentru N se face prin diagrama Hasse, se face printr-un graf neorientat, dar ca semantica e reprezentat de 
+jos in sus 
+
+Reprezentarea se numeste lant 
+
+
+Fie (C, <=) mpo astfel incat:
+    - exista un cel mai mic element in C 
+    - orice lant (x1<=x2<=x3...) are un supremum
+
+Supremum se noteaza ca V xn
+
+atunci (C, <=) se numeste multime partial ordonata completa
+
+Exemplu:
+(P({1, 2, 3}, inclus sau egal))
+
+Cardinalitea elementelor |P({1, 2, 3}) = 2^3 unde este numarul posibil al submultimilor
+
+asa ca am cel mai mic element, multimea vida 
+dupa cele dintr un element 
+si dupa cele de 2 element
+si cel cu toate elementele
+
+
+          {1, 2, 3}
+
+{1, 2, 3} {1, 2, 3}  {1, 2, 3}
+{1}        {2}         {3}
+            multimea vida 
+        E un cub 
+        vezi poza
+
+si relatia dintre aceste noduri este incluziune 
+diagram Hasse
+
+
+si acum ca sa aflam supremum trb sa gasim intersectia unde se intalnesc oricare 2 noduri
+
+Def:
+Fie (C, <=) si o functie F:C-> C, un punct fix al lui F
+este un punct mic din C pentru care F(a) = a
+
+Def:
+Fie (C, <=) si F:C->C un cel mai punct fix, il notam lfp 
+lfp este pct fix (F(lfp) = lfp)
+si lfp <= a pentur oricare punct fix din F
+
+niuF
+
+------------------------------------------------------------------------------------------------
+
+Exercitiu
+Ex1. 
+Identificati pct fixe si cel mai pct fix pentru functiile f1, f2, f3 -> P({1, 2, 3}) -> P({1, 2, 3})
+f1(Y) = Y U {1}
+f2(Y) = {
+    {1} daca 1 apartine Y
+    multimea vida altfel
+}
+f3(Y) = {
+    multimea vida daca 1 aprtine   Y
+    {1} altfel  
+}
+
+
+pentru f1(A)=A astfel o sa avem {1} {1,2} {1, 3} {1, 2, 3} si cel mai mic e {1}
+
+pentru f2(multimea vida) = multimea vida
+        si f2(1) = {1} 
+        si cel mai mic e multimea vida 
+
+pentru f3(multimea vida)= {1}
+        f3(1) = multimea vida => nu are puncte fixe
+
+
+Def. 
+Fie (A, <=A) si (B, <=B) mpo 
+
+o functie f:A->B s.n. crescatoarea monotona sau izotona
+daca pentru a1 (<=A) a2 cu a1, a2 apartine A atunci f(a1) (<=B) f(a2)
+
+
+Def. 
+Fie (A, <=A), (B, <=B) cpo 
+si f:A->B o functie izotona spunem ca f este continua daca f comuta cu supremum
+adica f(supremum V xn) = supremum V (fxn)
+
+
+Def. 
+O clauza definita propozitionala este de forma 
+[
+    q,  unde q este clauza unitiatea 
+    p1 ^ ... ^pn -> q
+]
+unde q si pi sunt variabile propozitionale
+
+Def. 
+Fie S o multime de clauze definite propozitionale
+fie A multimea variabilelor care apar in S
+Fie Baza = {pi cu pi apartine S} multimea clauzelor unitiate
+
+Definim fs:P(A)
+
+fs(Y)=Y U Baza U {a apartine A | s1 ^ ... ^ sn ->a} aprtine S, s1 aprtine Y, ... sn aprtine Y 
+
+Exemplu 
+S={x, x1^x3->x2, x3}
+A={x1, x2, x3} apartin Var 
+Baza{x1, x3}
+
+fs(multimea vida) = multimea vida U Baza U multimea vida = {x1, x3}
+fx({x1, x3}) = {x1, x3} U Baza U {x2}
+    x2 pentru ca acesta poate fi derivat din regula x1^x3->x2
+
+Exercitiu
+Demonstrati ca fs este izotona
+Y1 inclus in Y2 atunci fs(Y1) este inclus in f2(Y2)
+
+fs(Y1) = Y1 U Baza {descendentii variabilelor}
+fs(Y2) = Y2 U Baza {descendentii variabilelor}
+
+
+trb sa arata ca fs(Y1) inclus in fs(Y2)
+si dupa ce evaluam unde Z1 includs in Z2 unde astea sunt multimile descendentiilor 
+inseamna ca exista descedentii din Z1 in Z2 
+
+de aici a devenit prea complicat ca sa mai scriu 
+
+
+--- SEDINTA VEZI POZA ---
+
+Rezolutie FOL
+Exercitiu 
+Folosind rezolutia aratati ca urmatoarea formula este valida
+phi := (oricare x (P(x)->Q(X))) -> (exista x P(x)) -> (exista x Q(x)) 
+
+Rezolutia este un mecanism care studiaza satifiabilitatea
+daca gasesc prin rezolutie o derivarea a lui box -> phi este nesatisfibiala
+Rezolutia este un proces de deductie
+
+phi este valida <=> !phi este nesatisfibiala
+deci trb sa facem rezolutia FOL si trb sa facem pentru !phi nesatisfibiala
+
+!!!!!!!!!Atentie la paranteze
+
+definesc !phi = !((oricare x (P(x)->Q(X))) -> (exista x P(x)) -> (exista x Q(x))) 
+
+Pas 1: 
+Forma rectificata aparitii distincte a acestui variabile trb redefinite
+
+(oricare x (P(x)->Q(X))) -> ((exista y P(y))->(exista z Q(z)))
+
+Pas 2: cuantifica universal variabile libere.
+aici nu avem
+
+Pas4. 
+se determina prenex 
+oricare x oricare y oricare z .... este prenex pentru ca toti cuantificatori sunt in fata
+
+phi -> psi |=| !phi v psi 
+si dupa fac De Morgan
+
+
+sa transform toate implicatiile in disjunctii si dupa sa fac de Morgan
+
+! ( ! (oricare x (P(x)->Q(X))) v ((exista y P(y))->(exista z Q(z))) )
+! ( ! (oricare x (!P(x) v Q(X))) v (!(exista y P(y)) v (exista z Q(z))) )
+
+incepesem sa scoatem negatiile 
+ ! (oricare x (!P(x) v Q(X))) => exista x (P(x) ^ !Q(x))
+ !(eista Y P(y)) => oricare y !P(Y)
+
+ si acum avem 
+
+
+
+ oricare x (!P(x) v Q(x) ^ exista y P(y) ^  oricare z !Q(z))
+ si incep sa scot cuatificatorii
+
+ oricare z oricare y oricare x ((!P(x) v Q(X)) ^ P(y) ^ !O(z))
+
+ forma skolem nu pastreaza validitatea, dar pastreaza satifiabilitatea
+
+ enununtul final trb sa fie universal 
+ oricare x oricare y oricare z oricare t oricare u phi 
+ trb sa scapam prin inlocuire de variabile din existential in limbaj de 
+ aritate egala cu numarul cuantificatorilor universali in dreapta
+
+ pentru u am 0 universali in dreapta si inlocuim u cu o constanta 
+ pentru y avem 2 z si t pentru ca u deja l am inlocuit cu o constanta 
+ astfel adaugam o functie de acei universali 
+
+
+
+ !e
+
+ se schim
+
+
+ ajungem sa avem un FNC 
+
+ Forma clauzala Fc ={
+    {!P(X), Q(x), {P(g(x))}, {!Q}}
+ }
+
+avem niste clauze si incepem sa facem rezolutia pe ele 
+C1
+C2
+C3
+
+facem intre C1 si C4 
+C4 = ..
+
+face intre C3 si C4 cu teta(z)
+
+obtinem box, inseamna ca forma conjuctiva nu este satifiabilitata 
+
+ceea ce inseamna ca forma skolem nu este satisifiabila, ceea ce inseman 
+
+
+
+
+Exercitiu Tema 
+Fie rationamentul
+1. Exista studenti carora le plac toate cursurile
+2. Niciunui student nu ii plac cursurile plictisitoare
+3. In concluzie, niciun curs nu e plictisitor 
+
+studiati validitatea acestui rationament 
+Indicati 
