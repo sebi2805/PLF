@@ -1,0 +1,147 @@
+Lambda calcul
+
+alpha conversie 
+beta reductie
+
+beta forme normale
+beta echivalent 
+
+
+Sintaxa:
+Lambda calcul este format din termina iar 
+t :: = x | t t | lambda x.t 
+
+t - termeni
+t t - aplicatii
+lambda x.t - abstractizari 
+
+
+unde lambda x.t este o notatie care spune f(x) = t 
+in haskell \x -> t 
+
+Exemplu: 
+var 2
+abstractizare lambda x.x + 1 
+aplicare (lambda x.x + 1) = 
+f(x) = x + 1
+f(2) = 3 
+
+
+
+Subiecte examen 
+    unificare
+    SLD 
+    lambda calcule
+
+Def. 
+Multimea lambda termenilor ^T se defineste inducti astfel
+(Var)  -> multimea Var lambda C= (inclus) ^T 
+(Apl) daca t1, t2 apartine ^t atunci (t1 t2) apartine ^T t1 aplicat lui t2 
+(abstractizare) daca x apartine Var ^ si t apartine ^T atunci (lambda x.t) apartine^T 
+
+Aplicarea este asociativa la stanga asta inseamna ca t1t2t3 = (t1t2) t3 
+Corpul abstractizarii se extinde la dreapta asta inseamna ca avem un lambda x.t1.t2 := lambda x.(t1 t2)
+Notam lambdaxyz.t in loc de lambda x lambda y lambda  z. t
+
+in termenul lambda x.t in t, toate aparitiile lui x se numesc aparitii legate 
+lambda x.xy, x var legata 
+             y var libera 
+
+
+Def. 
+FV : ^T -> P(Var ^)
+            |
+            -> multimea partilor variabile
+
+-> Var ^ x y 
+-> P(Var ^) = {x, y}
+
+Fie 
+FV(x) = {x}
+FV(t1t2) = FV(t1) reunit cu FV(t2)
+FV(lambda x.t) = FV(T) \ {x}
+
+Exercitiu:
+
+Care este multimea variabilelor libere din 
+1. FC(lambda x.xy) = FV(xy) \ {x} = (FV(x) reunit cu FV(y)) \ {x} = ({x} reunit cu {y}) \ {x} = {x, y} \ {x}
+
+2. FV(x lmabda x.xy) = FV(x) reunit cu FV(lambda x.xy) = {x} reunit cu {y}
+
+3. FV(x (lambda x.xyz) (lambda v.yv)) = {x, y, z}
+
+4. FV(lambda t. (lambda xyz. yzx)t) = {multimea vida}
+daca pt un t apartine ^T ave, ca FV(t) = vida putem spune ca t este inchis
+
+
+
+Relatia de alpha conversie numita si alpha echivalenta 
+este o operatie echivalenta la care adaugam doua reguli specifice 
+
+la care adaugam compatibilitatea 
+si redunumire 
+
+
+Reflexivitate t = alpha t 
+Simetrice t1 = alpha t2 atunci si t2 = alpha t1 
+Tranzitive alpha t1 = alpha t2 si  si t2 = alpha t3 atunci t1 = alpha t3 
+
+
+compatibilitate t1 = alpha t2 atunci 
+    t t1 = alpha t t2 
+    t1 t - alpha t2 t 
+    lambda x.t1 = alpha lambda x.t2 
+
+redunumire lambda x.t = alpha lambda y [ y/x] t
+            schimb numele argumentelor 
+
+Substitutia 
+[u/x] t -> variabile x este inlocuita de termenul u in termenul t 
+(Var) [u/x] x = u 
+(Var) [u/x] y = y cand x != y 
+(Aplic) [u/x] (t1 t2) = ([u/x] t1) ([u/x] t2)
+(Abs) [u/x] lambda x.t = lambda x.t ptc nu influenteza cu nimic
+(Abs) [u/x] lambda y.t cand x !=y y nu apartine in FV(u) = pot sa inlocuiesc dorect lambda y.[u/x]t
+(Abs) [u/x] lambda y.t cand x !=y y apartine in FV(u) = aici schimba termenul daca se reeta lambda z. [u/x]( [z/y] t ) unde z este o variabila noua  
+
+
+
+Relatia de beta reductie 
+
+-> beta  inclus in (^T)^2
+
+am doua reguli 
+    (lambda x.t) u -> beta [u/x] t 
+    daca t1 se beta reduce in t2 atunci t t1 -> t t2 
+    t1 t -> beta t2 t 
+
+lambda x t1 -> beta lambda x.t2
+
+-> beta inclus (^ T/ = alpha)
+
+t1 vezi poza
+10:49 
+
+Exerictiul 2 
+Calculati 
+    (lambda x.(lambda y. yx) z) v 
+    fac din interior evaluez yx cand z inlocuieste pe y 
+    (lambda x. [z/y] yx) - > (lambda x.zx) v =beta  [v/x] zx =  alpha zv
+
+    fac si din exterior
+    [v/x](lambda y.yx)z - >( lambda y.yv)z = [z/y] yv = alpha zv
+
+
+Obs daca un t apartien ^T nu se mai paote B-rescrie atunci el se numeste B-forma normala  
+
+Th. Church-Rosser 
+daca un lmbad termen t se rescrie in * star pasi in t1 si tot in * pasi t2 
+atunci exista u un lambda termen astfel incat t1 se rescrie in u si t2 tot in u 
+
+Proprietatea asta a rescrieriise numeste confluenta 
+
+
+
+
+
+
